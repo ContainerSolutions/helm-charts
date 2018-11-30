@@ -1,6 +1,7 @@
 # Helm Charts
 
-Helm charts repository.
+Barbone charts repository built following the official [Chart Repository
+Guide](https://github.com/helm/helm/blob/master/docs/chart_repository.md)
 
 ## Update
 
