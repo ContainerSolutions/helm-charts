@@ -3,11 +3,11 @@ entries:
   kafka-pubsub-emulator:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-11-30T13:09:09.865342368Z
-    description: A Helm chart for Kubernetes
-    digest: 6cceee09b82d7a399ae5f981a7510653237e6f40b63cbd73fd5a8f2d36fdf7b0
+    created: 2018-11-30T13:27:51.844039789Z
+    description: A Helm chart for the GCP Kafka PubSub Emulator
+    digest: 7b0ae5851657820a574f46359b7d7e15ede1a8e2bedf0ac4e26062607dee773e
     name: kafka-pubsub-emulator
     urls:
     - kafka-pubsub-emulator-0.1.0.tgz
     version: 0.1.0
-generated: 2018-11-30T13:09:09.865009651Z
+generated: 2018-11-30T13:27:51.843722937Z
