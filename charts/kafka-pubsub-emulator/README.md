@@ -43,7 +43,7 @@ You will need to specify at least your Kafka Bootstrap Servers, for example:
 
 ```
 helm install --name emulator \
-    --set emulatorConfig.kafka.bootstrapServers='kafka1:9092,kafka2:9092,kafka3:9092'
+    --set emulatorConfig.kafka.bootstrapServers='kafka1:9092\,kafka2:9092\,kafka3:9092'
 ```
 
 |Parameter|Description|Default|
@@ -66,4 +66,15 @@ helm install --name emulator \
 
 ## Use the Emulator
 
-
+According to Google Cloud Pub/Sub
+[documentation](https://cloud.google.com/pubsub/docs/emulator), [Google Cloud
+Client
+Libraries](https://cloud.google.com/pubsub/docs/reference/libraries#gcloud-libraries)
+support using a Pub/Sub emulator by setting the `PUBSUB_EMULATOR_HOST`
+environment variable, for example, on Linux:
+```
+export PUBSUB_EMULATOR_HOST=$SERVICE_IP:$SERVICE_PORT
+./my_pubsub_application
+```
+Where `$SERVICE_IP` and `$SERVICE_PORT` depend on the way you expose the
+service outside of your Kubernetes cluster.
