@@ -13,7 +13,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 80
 
 ingress:
@@ -23,11 +23,11 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - chart-example.local
+    - emulator.local
   tls: []
-  #  - secretName: chart-example-tls
+  #  - secretName: emulator-tls
   #    hosts:
-  #      - chart-example.local
+  #      - emulator.local
 
 livenessProbe:
   tcpSocket:
@@ -64,7 +64,7 @@ emulatorConfig:
   server:
     port: 8080
   kafka:
-    bootstrapServers: kafka1-0.kafka1-headless:9092,kafka1-1.kafka1-headless:9092,kafka1-2.kafka1-headless:9092
+    bootstrapServers: []
     consumer:
       subscriptions:
         - name: subscription-topic1
