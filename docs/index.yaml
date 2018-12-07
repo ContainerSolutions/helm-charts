@@ -3,9 +3,9 @@ entries:
   kafka-pubsub-emulator:
   - apiVersion: v1
     appVersion: 1.0.0.0
-    created: 2018-12-07T10:00:43.283858541Z
+    created: 2018-12-07T10:04:23.645767088Z
     description: A Helm chart for the GCP Kafka PubSub Emulator
-    digest: 34da2cda185f22abb77aea2a70b6ead6e4ce25a25986dbf0c7c2f393175a67c7
+    digest: d4e63e9d9282cb7c9eb9aa382b4d159e31883da7c38af4ee8dfa2aab668e4355
     keywords:
     - google cloud platform
     - kafka
@@ -19,4 +19,4 @@ entries:
     urls:
     - kafka-pubsub-emulator-0.1.0.tgz
     version: 0.1.0
-generated: 2018-12-07T10:00:43.283493488Z
+generated: 2018-12-07T10:04:23.645378385Z
