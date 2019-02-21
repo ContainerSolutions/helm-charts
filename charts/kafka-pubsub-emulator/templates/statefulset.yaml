@@ -1,5 +1,5 @@
 apiVersion: apps/v1beta2
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "kafka-pubsub-emulator.fullname" . }}
   labels:
@@ -19,17 +19,25 @@ spec:
         app.kubernetes.io/name: {{ include "kafka-pubsub-emulator.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      volumes:
-        - name: config-volume
-          configMap:
-            name: {{ include "kafka-pubsub-emulator.fullname" . }}
+      initContainers:
+        - name: config-init
+          image: busybox
+          command:
+            - sh
+            - '-c'
+            - |
+              echo '{{ .Values.server | toJson }}' > /etc/config/config.json
+              echo '{{ .Values.pubsub | toJson }}' > /etc/config/pubsub.json
+          volumeMounts:
+            - name: persistent-config-volume
+              mountPath: /etc/config
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["--configuration.location","/etc/config/application.yaml"]
+          args: ["-c","/etc/config/config.json", "-p", "/etc/config/pubsub.json"]
           volumeMounts:
-            - name: config-volume
+            - name: persistent-config-volume
               mountPath: /etc/config
           ports:
             - name: http
@@ -57,3 +65,11 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: persistent-config-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

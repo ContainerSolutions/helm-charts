@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: us.gcr.io/kafka-pubsub-emulator/kafka-pubsub-emulator
-  tag: 1.0.0.0
+  tag: 0.1.0
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -60,22 +60,25 @@ affinity: {}
  #
  # Kafka Pub/Sub Emulator configuration
  #
-emulatorConfig:
-  server:
-    port: 8080
+server:
+  port: 8080
   kafka:
     bootstrapServers: []
-    consumer:
-      subscriptions:
-        - name: subscription-topic1
-          topic: topic1
-          ackDeadlineSeconds: 10
-      properties:
-        max.poll.records: 2000
-    producer:
+    producerExecutors: 4
+    producerProperties:
+      linger.ms: 200
+      batch.size: 10000
+      buffer.memory: 32000000
+    consumerProperties:
+      max.poll.records: 1000
+    consumersPerSubscription: 4
+
+pubsub:
+  projects:
+    - name: default
       topics:
-        - topic1
-      properties:
-        linger.ms: 5
-        batch.size: 1000000
-        buffer.memory: 32000000
+        - name: topic1
+          kafkaTopic: topic1
+          subscriptions:
+            - name: subscription-topic1
+              ackDeadlineSeconds: 10
