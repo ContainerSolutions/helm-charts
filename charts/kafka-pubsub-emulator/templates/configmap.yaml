@@ -9,5 +9,5 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
-  application.yaml: |
-{{ toYaml .Values.emulatorConfig | indent 4 }}
+  config.json: |
+{{ toPrettyJson .Values.server | indent 4 }}

@@ -26,18 +26,30 @@ spec:
             - sh
             - '-c'
             - |
-              echo '{{ .Values.server | toJson }}' > /etc/config/config.json
-              echo '{{ .Values.pubsub | toJson }}' > /etc/config/pubsub.json
+              set -xe
+
+              DESTINATION=/run/pubsub/pubsub.json
+              mkdir -p $(dirname ${DESTINATION})
+
+              if [ ! -f ${DESTINATION} ] ; then
+              cat << 'EOF' > ${DESTINATION}
+{{ toPrettyJson .Values.pubsub | indent 14 }}
+              EOF
+              fi
+
+              cat ${DESTINATION}
           volumeMounts:
             - name: persistent-config-volume
-              mountPath: /etc/config
+              mountPath: /run/pubsub
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["-c","/etc/config/config.json", "-p", "/etc/config/pubsub.json"]
+          args: ["-c", "/etc/config/config.json", "-p", "/run/pubsub/pubsub.json"]
           volumeMounts:
             - name: persistent-config-volume
+              mountPath: /run/pubsub
+            - name: config-volume
               mountPath: /etc/config
           ports:
             - name: http
@@ -65,11 +77,15 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "kafka-pubsub-emulator.fullname" . }}
   volumeClaimTemplates:
-  - metadata:
-      name: persistent-config-volume
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+    - metadata:
+        name: persistent-config-volume
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
