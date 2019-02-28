@@ -57,9 +57,9 @@ tolerations: []
 
 affinity: {}
 
- #
- # Kafka Pub/Sub Emulator configuration
- #
+#
+# Kafka Pub/Sub Emulator Server configuration
+#
 server:
   port: 8080
   kafka:
@@ -73,6 +73,14 @@ server:
       max.poll.records: 1000
     consumersPerSubscription: 4
 
+#
+# Kafka Pub/Sub Emulator Project layout configuration
+#
+# NOTE: this configuration is written to a pubsub.json file in the persistentvolume when the
+# emulator pod is started. If an existing configuration file is present in the persistentvolume
+# it will *not* be overwritten. This is done in order to not lose the changed written at runtime
+# by the emulator.
+#
 pubsub:
   projects:
     - name: default
